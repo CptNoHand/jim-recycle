@@ -11,11 +11,11 @@ Config = {
 	Frozen = true, --Do you want the peds to be unable to move? It's probably a yes, so leave true in there.
 	Stoic = true, --Do you want the peds to react to what is happening in their surroundings?
 	Fade = true, -- Do you want the peds to fade into/out of existence? It looks better than just *POP* its there.
-	Distance = 40.0, --The distance you want peds to spawn at
+	Distance = 50.0, --The distance you want peds to spawn at
 	EnableOpeningHours = true, -- Enable opening hours? If disabled you can always open the pawnshop.
 	OpenHour = 9, -- From what hour should the pawnshop be open?
 	CloseHour = 21, -- From what hour should the pawnshop be closed?
-	ThirdPartyStorageSystem = true, -- true for disc-inventory
+	ThirdPartyStorageSystem = false, -- true for disc-inventory
 	StorageSlots = 70, -- max slots.
 	StorageWeight = 500,
 }

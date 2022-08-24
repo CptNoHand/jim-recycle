@@ -170,11 +170,11 @@ AddEventHandler('jim-recycle:Dumpsters:Reward', function(listKey)
             TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[item], 'add', amount)
             Citizen.Wait(500)
         end
-        local Luck = math.random(1, 4)
-        local Odd = math.random(1, 4)
+        local Luck = math.random(1, 25)
+        local Odd = math.random(1, 25)
         if Luck == Odd then
-            local random = math.random(1, 4)
-            Player.Functions.AddItem("rubber", random, false, {["quality"] = nil})
-            TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items["rubber"], 'add', random)
+            local random = math.random(1, 2)
+            Player.Functions.AddItem("cryptostick", random, false, {["quality"] = nil})
+            TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items["cryptostick"], 'add', random)
         end
 end)

@@ -70,6 +70,7 @@ Config = {
 		"glass",
 		"bottle",
 		"can",
+		"rubber",
 	},
 	RecycleAmounts = {
 		recycleMin = 10,

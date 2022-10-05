@@ -1,4 +1,5 @@
 local QBCore = exports['qb-core']:GetCoreObject()
+RegisterNetEvent('QBCore:Client:UpdateObject', function() QBCore = exports['qb-core']:GetCoreObject() end)
 
 local searched = {34343435323} -- No Touch.
 local canSearch = true -- No touch.
@@ -17,7 +18,7 @@ local function unloadAnimDict(dict) if Config.Debug then print("Debug: Removing 
 
 CreateThread(function()
 	--Dumpster Third Eye
-	exports['qb-target']:AddTargetModel(scrap, { options = { { event = "jim-recycle:Scrap:Search", icon = "fas fa-dumpster", label = "Search", }, }, distance = 1.5 })
+	exports['qb-target']:AddTargetModel(scrap, { options = { { event = "jim-recycle:Scrap:Search", icon = "fas fa-dumpster", label = Loc[Config.Lan].target["search"], }, }, distance = 1.5 })
 end)
 
 --Search animations
@@ -25,7 +26,7 @@ local function startSearching(coords)
     canSearch = false
     --Calculate if you're facing the trash--
     if #(coords - GetEntityCoords(PlayerPedId())) > 1.5 then TaskGoStraightToCoord(PlayerPedId(), coords, 0.4, 200, 0.0, 0) Wait(300) end
-    if not IsPedHeadingTowardsPosition(PlayerPedId(), coords, 20.0) then TaskTurnPedToFaceCoord(PlayerPedId(), coords, 1500) Wait(1500) end
+    lookEnt(coords)
     local dict = 'amb@prop_human_bum_bin@base'
     local anim = 'base'
     loadAnimDict(dict)
@@ -52,40 +53,52 @@ RegisterNetEvent('jim-recycle:Scrap:Search', function()
                 if Config.Debug then print("^5Debug^7: ^2Starting Search of entity^7: '^6"..scrapped.."^7'") end
                 for i = 1, #searched do
                     if searched[i] == scrapped then scrapFound = true end -- Theres a dumpster nearby
-                    if i == #searched and scrapFound then TriggerEvent("QBCore:Notify", "Already Searched.", "error") return -- Let player know already searched
+                    if i == #searched and scrapFound then TriggerEvent("QBCore:Notify", Loc[Config.Lan].error["searched"], "error") return -- Let player know already searched
                     elseif i == #searched and not scrapFound then -- If hasn't been searched yet
                         local dict = "anim@amb@machinery@speed_drill@"
                         local anim = "look_around_left_02_amy_skater_01"
                         loadAnimDict(dict)
                         TaskPlayAnim(PlayerPedId(), dict, anim, 1.0, 1.0, 3500, 1.5, 5, 0, 0, 0)
-                        if Config.useQBLock then
+                        if Config.Minigame == "qb-lock" then
                             local success = exports['qb-lock']:StartLockPickCircle(math.random(2,4), math.random(10,15), success)
                             if success then
-                                TriggerEvent("QBCore:Notify", "You search the Scrap!", "success")
+                                TriggerEvent("QBCore:Notify", Loc[Config.Lan].success["get_scrap"], "success")
                                 startSearching(GetEntityCoords(scrapped))
                                 searched[i+1] = scrapped
                             else
-                                TriggerEvent("QBCore:Notify", "You couldn't find anything.", "error")
+                                TriggerEvent("QBCore:Notify", Loc[Config.Lan].error["nothing"], "error")
                                 searched[i+1] = scrapped
                                 ClearPedTasks(PlayerPedId())
                             end
-                        else
+                        elseif Config.Minigame == "qb-skillbar" then
                             local Skillbar = exports['qb-skillbar']:GetSkillbarObject()
                             Skillbar.Start({
                                 duration = math.random(2500,5000),
                                 pos = math.random(10, 30),
                                 width = math.random(10, 20),
                             }, function()
-                                TriggerEvent("QBCore:Notify", "You search the Scrap!", "success")
+                                TriggerEvent("QBCore:Notify", Loc[Config.Lan].success["get_scrap"], "success")
                                 startSearching(GetEntityCoords(scrapped))
                                 searched[i+1] = scrapped
                                 Citizen.Wait(1000)
                             end, function()
-                                TriggerEvent("QBCore:Notify", "You couldn't find anything.", "error")
+                                TriggerEvent("QBCore:Notify", Loc[Config.Lan].error["nothing"], "error")
                                 searched[i+1] = scrapped
                                 ClearPedTasks(PlayerPedId())
                                 Citizen.Wait(1000)
                             end)
+                        elseif Config.Minigame == "ps-ui" then
+                            exports['ps-ui']:Circle(function(success)
+                                if success then
+                                    TriggerEvent("QBCore:Notify", Loc[Config.Lan].success["get_trash"], "success")
+                                    startSearching(GetEntityCoords(dumpster))
+                                    searched[i+1] = dumpster
+                                else
+                                    TriggerEvent("QBCore:Notify", Loc[Config.Lan].error["nothing"], "error")
+                                    searched[i+1] = dumpster
+                                    ClearPedTasks(PlayerPedId())
+                                end
+                            end, 2, 15) -- NumberOfCircles, MS
                         end
                         break
                     end

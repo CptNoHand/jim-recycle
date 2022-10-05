@@ -1,6 +1,6 @@
 
-
 Config = {
+	Lan = "en",
 	Debug = false, -- Toggle Debug Mode
 	Blips = true, -- Enable Blips?
 	BlipNamer = false, -- Enable to Name Blips different things, disable if you already have too many blips as this will group them together
@@ -13,7 +13,7 @@ Config = {
 	CloseHour = 21, -- From what hour should the pawnshop be closed?
 	PayAtDoor = nil, -- Set to nil stop turn this off, set to a number to enable
 
-	useQBLock = false, -- Enable to use qb-lock instead of qb-skillbar when searching
+	Minigame = "qb-skillbar", -- Enable minigame when searching. qb-skillbar/qb-lock/ps-ui
 
 	OutsideTele = vector4(746.83, -1399.66, 26.6, 230.732),
 	InsideTele = vector4(993.16, -3097.61, -39.90, 82.95),
@@ -86,3 +86,5 @@ Config = {
 		thouMax = 28,
 	}
 }
+
+Loc = {}
